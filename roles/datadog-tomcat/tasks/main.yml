@@ -1,0 +1,14 @@
+---
+
+- name: Ensure the datadog agent is started
+  action: service name=datadog-agent state=started
+
+- name: Configure the agent to connect the tomcat server
+  template: src=datadog-tomcat.conf.j2 dest=/etc/dd-agent/conf.d/tomcat.yaml
+
+- name: restart datadog
+  action: service name=datadog-agent state=restarted
+
+- name: Ensure the datadog port 17123 is opened
+  wait_for: port=17123 delay=2
+  ignore_errors: True

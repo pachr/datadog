@@ -1,0 +1,23 @@
+---
+
+- name: Apt key 
+  apt_key: id=C7A7DA52 keyserver=keyserver.ubuntu.com state=present
+
+- name: Apt repository
+  apt_repository: repo='deb http://apt.datadoghq.com/ stable main' state=present update_cache=yes
+
+- name: Install datadog agent via yum
+  apt: name=datadog-agent state=latest update_cache=yes
+
+- name: datadog configuration
+  template: src=datadog.conf.j2 dest=/etc/dd-agent/datadog.conf
+  notify: restart datadog
+
+- name: Ensure datadog agent is started
+  service: name=datadog-agent state=started
+
+- name: Ensure the datadog port 17123 is opened
+  wait_for: port=17123 delay=2
+  ignore_errors: True
+
+  

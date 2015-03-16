@@ -1,0 +1,23 @@
+---
+- name: Enables the rabbitmq_management plugin
+  rabbitmq_plugin: names=rabbitmq_management state=enabled
+
+- name: Create a read-only user
+  rabbitmq_user:
+    user=datadog
+    password={{rabbitmq_user_pass}}
+    vhost=/
+    read_priv=.*
+
+- name: Ensure datadog agent is started
+  action: service name=datadog-agent state=started
+
+- name: Configure the agent to connect the rabbitmq server
+  template: src=datadog-rabbitmq.conf.j2 dest=/etc/dd-agent/conf.d/rabbitmq.yaml
+
+- name: restart datadog
+  action: service name=datadog-agent state=restarted
+
+- name: Ensure the datadog port 17123 is opened
+  wait_for: port=17123 delay=2
+  ignore_errors: True

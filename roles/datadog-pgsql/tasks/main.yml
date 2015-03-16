@@ -1,0 +1,28 @@
+---
+- name: Ensure psycog2 package is present
+  apt: name=python-psycopg2 state=present
+
+
+- name: Create read-only datadog user
+  sudo: yes
+  sudo_user: postgres 
+  postgresql_user: 
+    db=postgres
+    user=datadog 
+    password={{datadog_pgsql_user_pass}}
+    priv=pg_stat_database:SELECT
+    state=present
+
+- name: Ensure datadog agent is started
+  action: service name=datadog-agent state=started
+
+- name: Configure the agent to connect the postgres server
+  template: src=datadog-pgsql.conf.j2 dest=/etc/dd-agent/conf.d/postgres.yaml
+
+- name: restart datadog
+  action: service name=datadog-agent state=restarted
+
+- name: Ensure the datadog port 17123 is opened
+  wait_for: port=17123 delay=2
+  ignore_errors: True
+

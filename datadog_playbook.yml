@@ -1,0 +1,117 @@
+---
+
+- name: Install datadog agent on hosts
+  hosts: "{{hosts}}"
+  remote_user: ubuntu
+  sudo: yes
+  sudo_user: root
+  vars_files:
+    - env_vars/datadog-agent/production.yml
+  roles:
+    - datadog-agent
+  handlers:
+    - include: handlers/handlers.yml
+  tags:
+    - datadog-agent
+
+- name : Install datadog agent on mongo servers
+  hosts : mongo
+  remote_user : ubuntu
+  sudo: yes
+  sudo_user: root
+  vars_files:
+    - env_vars/datadog-mongo/production.yml
+  roles:
+    - datadog-mongo
+  tags:
+    - datadog-mongo
+
+- name : Install datadog agent on pgsql servers
+  hosts : pgsql
+  remote_user : ubuntu
+  sudo: yes
+  sudo_user: root
+  vars_files:
+    - env_vars/datadog-pgsql/production.yml
+  roles:
+    - datadog-pgsql
+  tags:
+    - datadog-pgsql
+
+- name : Install datadog agent on memcached servers
+  hosts : memcached
+  remote_user : ubuntu
+  sudo: yes
+  sudo_user: root
+  roles: 
+    - datadog-memcached
+  tags:
+    - datadog-memcached
+
+- name : Install datadog agent on solr servers
+  hosts : solr
+  remote_user : ubuntu
+  sudo: yes
+  sudo_user: root
+  vars_files:
+    - env_vars/datadog-solr/production.yml
+  roles:
+    - datadog-solr
+  tags:
+    - datadog-solr
+
+- name : Install datadog agent on tomcat servers
+  hosts : tomcat
+  remote_user : ubuntu
+  sudo: yes
+  sudo_user: root
+  vars_files:
+    - env_vars/datadog-tomcat/production.yml
+  roles:
+    - datadog-tomcat
+  tags:
+    - datadog-tomcat
+
+- name : Install datadog agent on jvm servers
+  hosts : jvm
+  remote_user : ubuntu
+  sudo: yes
+  sudo_user: root
+  roles:
+    - datadog-jvm
+  tags:
+    - datadog-jvm
+
+- name : Install datadog agent on rabbitmq servers
+  hosts : rabbitmq
+  remote_user : ubuntu
+  sudo: yes
+  sudo_user: root
+  vars_files:
+    - env_vars/datadog-rabbitmq/production.yml
+  roles:
+    - datadog-rabbitmq
+  tags:
+    - datadog-rabbitmq
+
+- name : Install datadog agent on nginx servers
+  hosts : nginx
+  remote_user : ubuntu
+  sudo: yes
+  sudo_user: root
+  vars_files:
+    - env_vars/datadog-nginx/production.yml
+  roles:
+    - datadog-nginx
+  tags:
+    - datadog-nginx
+
+- name : Install datadog agent on dogstatsd servers
+  hosts : dogstatsd
+  remote_user : ubuntu
+  sudo: yes
+  sudo_user: root
+  roles:
+    - datadog-dogstatsd
+  tags:
+    - datadog-dogstatsd
