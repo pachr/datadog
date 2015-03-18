@@ -6,7 +6,7 @@
   sudo: yes
   sudo_user: root
   vars_files:
-    - env_vars/datadog-agent/staging.yml
+    - env_vars/datadog-agent/production.yml
   roles:
     - datadog-agent
   tags:
