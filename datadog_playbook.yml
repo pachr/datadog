@@ -9,8 +9,6 @@
     - env_vars/datadog-agent/staging.yml
   roles:
     - datadog-agent
-  handlers:
-    - include: handlers/handlers.yml
   tags:
     - datadog-agent
 

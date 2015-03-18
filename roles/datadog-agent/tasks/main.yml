@@ -11,10 +11,9 @@
 
 - name: datadog configuration
   template: src=datadog.conf.j2 dest=/etc/dd-agent/datadog.conf
-  notify: restart datadog
 
-- name: Ensure datadog agent is started
-  service: name=datadog-agent state=started
+- name: Ensure datadog agent is restarted
+  service: name=datadog-agent state=restarted
 
 - name: Ensure the datadog port 17123 is opened
   wait_for: port=17123
