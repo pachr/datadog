@@ -42,8 +42,34 @@ and put in it the DNS or IP address of the hosts in the correct host group
 * To install the datadog agent on all host
 
 ```
-ansible-playbook -i hosts datadog_playbook.yml --extra-vars "hosts=all" --private-key=~/path/to/private/key -vvvv
+ansible-playbook -i hosts datadog_playbook.yml --extra-vars "hosts=all" --private-key=~/path/to/private/key
 ```
+Possible tags  :
+
+- datadog-<tags>
+
+	* agent
+	* mongo
+	* pgsql
+	* memcached
+	* solr
+	* tomcat 
+	* jvm
+	* rabbitmq
+	* nginx
+	* dogstatsd
+
+Example :
+
+```
+ansible-playbook -i hosts datadog_playbook.yml --tags "datadog-mongo" --private-key=~/path/to/private/key
+```
+
+Notes :
+
+We can --skip-tags also
+--extra-vars "hosts=all" is required for datadog-agent role only
+other roles have them hosts specified in the play (See Inventory file section above)
 
 ##Requirements
 

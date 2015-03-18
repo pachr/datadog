@@ -1,10 +1,39 @@
 ---
-- name: Nginx | Enable the status stub sites-available
-  file:
-    path: "{{nginx_dir}}/sites-enabled/nginx_status"
-    src: "{{nginx_dir}}/sites-available/nginx_status"
-    state: link
-    force: yes
+- name: Set up nginx config directory
+  file: path=/etc/nginx/{{ item }}
+        state=directory
+  with_items:
+    - sites-available
+    - sites-enabled
+
+#Nginx config file is already set up
+
+- name: Desactivate the default nginx site
+  file: path=/etc/nginx/sites-enabled/default
+        state=absent
+
+- name: Generate the stub_status site config
+  copy: src=datadog-nginx-stub-status.conf.j2
+        dest=/etc/nginx/sites-available/status
+
+- name: Activate the stub_status site
+  file: src=/etc/nginx/sites-available/status
+        dest=/etc/nginx/sites-enabled/status
+        state=link
+
+- name: Add site for the app under development
+ when: app is defined
+ template: src=templates/nginx.site.conf.j2
+           dest=/etc/nginx/sites-available/site
+
+- name: Activate the app
+  file: src=/etc/nginx/sites-available/site
+        dest=/etc/nginx/sites-enabled/site
+        state=link
+  when: app is defined
+
+- name: restart nginx
+  command: restart nginx
 
 - name: Ensure datadog agent is started
   action: service name=datadog-agent state=started
@@ -16,5 +45,5 @@
   action: service name=datadog-agent state=restarted
 
 - name: Ensure the datadog port 17123 is opened
-  wait_for: port=17123 delay=2
+  wait_for: port=17123
   ignore_errors: True

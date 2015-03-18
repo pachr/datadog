@@ -17,7 +17,7 @@
   service: name=datadog-agent state=started
 
 - name: Ensure the datadog port 17123 is opened
-  wait_for: port=17123 delay=2
+  wait_for: port=17123
   ignore_errors: True
 
   
