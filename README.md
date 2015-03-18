@@ -42,7 +42,7 @@ and put in it the DNS or IP address of the hosts in the correct host group
 * To install the datadog agent on all host
 
 ```
-ansible-playbook -i hosts datadog_playbook.yml --extra-vars "hosts=all" --private-key=~/path/to/private/key
+ansible-playbook -i hosts datadog_playbook.yml --extra-vars "hosts=all" --vault-password-file ~/.vault_pass.txt --private-key=~/path/to/private/key 
 ```
 Possible tags  :
 
@@ -62,7 +62,7 @@ Possible tags  :
 Example :
 
 ```
-ansible-playbook -i hosts datadog_playbook.yml --tags "datadog-mongo" --private-key=~/path/to/private/key
+ansible-playbook -i hosts datadog_playbook.yml --tags "datadog-mongo" --vault-password-file ~/.vault_pass.txt --private-key=~/path/to/private/key
 ```
 
 Notes :
